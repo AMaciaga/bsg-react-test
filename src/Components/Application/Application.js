@@ -1,10 +1,11 @@
 import React from 'react'
 import { BrowserRouter,Route, Switch } from 'react-router-dom';
-import MainPage from '../MainPage/MainPage';
-import SignIn from '../SignIn/SignIn';
+
 import Splash from '../Splash/Splash';
-import WrapperWithHeader from '../Wrappers/WrapperWithHeader';
-import WrapperWithoutHeader from '../Wrappers/WrapperWithoutHeader';
+import SignIn from '../SignIn/SignIn';
+import MainPage from '../MainPage/MainPage';
+import MoviePage from '../MoviePage/MoviePage';
+import Wrapper from '../Wrappers/Wrapper';
 
 function Application(){
     return(
@@ -12,9 +13,10 @@ function Application(){
             <Switch>
                 <Route exact path="/" component={Splash}/>
                 <Route exact path="/signIn" component={SignIn}/>
-                <WrapperWithHeader>
+                <Wrapper header={true}>
                     <Route exact path="/home" component={MainPage}/>
-                </WrapperWithHeader>
+                    <Route exact path="/movie/:id" component={MoviePage}/>
+                </Wrapper>
             </Switch>
         </BrowserRouter>
     )

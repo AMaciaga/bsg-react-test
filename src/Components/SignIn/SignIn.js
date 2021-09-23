@@ -1,22 +1,49 @@
 import React, { Component } from 'react'
-
+import axios from 'axios';
 import { Row, Col, Form, Input, Button, Card } from 'antd';
-import WrapperWithoutHeader from '../Wrappers/WrapperWithoutHeader';
+import { v4 as uuidv4} from 'uuid';
 
+import Wrapper from '../Wrappers/Wrapper';
 
 class SignIn extends Component {
 
     onFinish = values => {
-        console.log('Success:', values)
-		this.props.history.push('/home')
+		const {username, password} = values
+		const uuid = uuidv4()
+		axios
+		.post(
+			"https://thebetter.bsgroup.eu/Authorization/SignIn",
+			{
+				Username: username,
+				Password: password,
+				Device:{
+					PlatformCode:"WEB",
+					Name: uuid
+				}
+			}
+		)
+		.then(response => {
+			if(response.status === 200){
+				sessionStorage.setItem('isAnon',false)
+				sessionStorage.setItem('username',response.data.User.FullName)
+				sessionStorage.setItem('authToken',response.data.AuthorizationToken.Token)
+				this.props.history.push('/home')
+			}
+		})
+		.catch(error => {
+			console.log("login error", error);
+		})
+		
     }
+
     onFinishFailed = errorInfo => {
         console.log('Failed:',errorInfo)
     }
+	
     render(){
         return(
-			<WrapperWithoutHeader>
-           
+			<Wrapper>
+				<div className='centered container'>
 				<Card >
 				<Form
 					style={{ width: 400 }}
@@ -31,7 +58,7 @@ class SignIn extends Component {
 								label="Username"
 								labelCol={{ span: 24 }}
 								wrapperCol={{ span: 24 }}
-								name="userName"
+								name="username"
 								rules={[{ required: true, message: 'Please enter username!' }]}>
 								<Input placeholder={'enter username'} />
 							</Form.Item>
@@ -43,7 +70,7 @@ class SignIn extends Component {
 								label="Password"
 								labelCol={{ span: 24 }}
 								wrapperCol={{ span: 24 }}
-								name="userPassword"
+								name="password"
 								rules={[{ required: true, message: 'Please enter password!!' }]}
 							>
 								<Input.Password placeholder={'enter password'} />
@@ -59,8 +86,9 @@ class SignIn extends Component {
 					</Form.Item>
 				</Form>
 				</Card>
+				</div>
 			
-			</WrapperWithoutHeader>
+			</Wrapper>
 
         )
     }
