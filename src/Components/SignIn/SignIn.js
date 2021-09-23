@@ -1,27 +1,15 @@
 import React, { Component } from 'react'
-import axios from 'axios';
 import { Row, Col, Form, Input, Button, Card } from 'antd';
-import { v4 as uuidv4} from 'uuid';
 
+import { signIn } from '../../APICalls/signInCall';
 import Wrapper from '../Wrappers/Wrapper';
+
 
 class SignIn extends Component {
 
     onFinish = values => {
 		const {username, password} = values
-		const uuid = uuidv4()
-		axios
-		.post(
-			"https://thebetter.bsgroup.eu/Authorization/SignIn",
-			{
-				Username: username,
-				Password: password,
-				Device:{
-					PlatformCode:"WEB",
-					Name: uuid
-				}
-			}
-		)
+		signIn(username,password)
 		.then(response => {
 			if(response.status === 200){
 				sessionStorage.setItem('isAnon',false)
@@ -39,7 +27,7 @@ class SignIn extends Component {
     onFinishFailed = errorInfo => {
         console.log('Failed:',errorInfo)
     }
-	
+
     render(){
         return(
 			<Wrapper>

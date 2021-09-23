@@ -1,29 +1,19 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import {Button, Image, Space} from 'antd'
-import { v4 as uuidv4} from 'uuid';
 
+import { signIn } from '../../APICalls/signInCall';
 import Wrapper from '../Wrappers/Wrapper';
 import logo from './../../logo.png'
 
 import './Splash.less'
+
 
 class Splash extends Component{
 
     render(){
 
         const _handleAnonymous = () =>{
-            const uuid = uuidv4()
-            axios
-            .post(
-                "https://thebetter.bsgroup.eu/Authorization/SignIn",
-                {
-                    Device:{
-                        PlatformCode:"WEB",
-                        Name: uuid
-                    }
-                }
-            )
+            signIn()
             .then(response => {
                 if(response.status === 200){
                     sessionStorage.setItem('isAnon',true)

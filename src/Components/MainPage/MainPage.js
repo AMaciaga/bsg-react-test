@@ -7,19 +7,19 @@ import SimpleBar from 'simplebar-react';
 
 import 'simplebar/dist/simplebar.min.css';
 import './MainPage.less'
+import { fetchMediaList } from '../../APICalls/fetchMediaList'
 
 const MainPage = () =>{
 
     const history = useHistory()
     const [lists, setLists] = useState([])
 
-    const url = "https://thebetter.bsgroup.eu/Media/GetMediaList"
 
     useEffect(() => {
         const token = sessionStorage.getItem('authToken')
         
-        const requestListThree = _getRequestForList(token,3)
-        const requestListFour = _getRequestForList(token,4)
+        const requestListThree = fetchMediaList(3, token)
+        const requestListFour = fetchMediaList(4, token)
 
         axios.all([requestListThree,requestListFour]).then(axios.spread((...responses) => {
             
@@ -51,22 +51,6 @@ const MainPage = () =>{
             console.log("data fetching error", error);
         })
     },[])
-
-    const _getRequestForList = (token, listId) =>{
-        
-        const bodyParams ={
-            MediaListId: listId,
-            IncludeCategories: false,
-            IncludeImages: true,
-            IncludeMedia: false,
-            PageNumber: 1,
-            PageSize: 15
-        }
-        const config ={
-            headers: { Authorization: `Bearer ${token}` }
-        }
-        return axios.post(url,bodyParams,config)
-    }
 
     const _handleOnClick = (id) =>{
         history.push(`/movie/${id}`)

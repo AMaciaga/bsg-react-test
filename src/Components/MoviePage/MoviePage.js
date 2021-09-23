@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import { Alert } from 'antd';
 import ReactPlayer from 'react-player'
+
+import { fetchMovie } from '../../APICalls/fetchMovie';
 
 const MoviePage = ({match}) => {
 
@@ -11,17 +12,7 @@ const MoviePage = ({match}) => {
     useEffect(() => {
         const token = sessionStorage.getItem('authToken')
         const isAnon = sessionStorage.getItem('isAnon')
-        const streamType = isAnon === "true" ? "TRIAL": "MAIN"
-        const id = Number(match.params.id)
-        const bodyParams ={
-            MediaId: id,
-            StreamType: streamType
-        }
-        const config ={
-            headers: { Authorization: `Bearer ${token}` }
-        }
-        axios
-        .post("https://thebetter.bsgroup.eu/Media/GetMediaPlayInfo",bodyParams,config)
+        fetchMovie(match.params.id,token,isAnon)
         .then(response => {
             if(response.status === 200){
                 setMovie(
