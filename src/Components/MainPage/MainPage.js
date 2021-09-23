@@ -5,9 +5,10 @@ import {Image,Card, Tooltip } from 'antd'
 import Meta from 'antd/lib/card/Meta'
 import SimpleBar from 'simplebar-react';
 
+import { fetchMediaList } from '../../APICalls/fetchMediaList'
+
 import 'simplebar/dist/simplebar.min.css';
 import './MainPage.less'
-import { fetchMediaList } from '../../APICalls/fetchMediaList'
 
 const MainPage = () =>{
 
@@ -19,7 +20,7 @@ const MainPage = () =>{
         const token = sessionStorage.getItem('authToken')
         
         const requestListThree = fetchMediaList(3, token)
-        const requestListFour = fetchMediaList(4, token)
+        const requestListFour = fetchMediaList(3, token)
 
         axios.all([requestListThree,requestListFour]).then(axios.spread((...responses) => {
             

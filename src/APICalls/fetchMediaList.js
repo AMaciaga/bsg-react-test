@@ -5,6 +5,7 @@ import { mainUrl} from "./constants"
 export const fetchMediaList = (listId,token) =>{
     
     const url = mainUrl + 'Media/GetMediaList'
+    const pageSize = 15
 
 
     const bodyParams ={
@@ -13,7 +14,7 @@ export const fetchMediaList = (listId,token) =>{
         IncludeImages: true,
         IncludeMedia: false,
         PageNumber: 1,
-        PageSize: 15
+        PageSize: pageSize
     }
     const config ={
         headers: { Authorization: `Bearer ${token}` }
